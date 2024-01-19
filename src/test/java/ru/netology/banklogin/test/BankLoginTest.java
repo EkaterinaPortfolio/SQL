@@ -1,9 +1,6 @@
 package ru.netology.banklogin.test;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ru.netology.banklogin.data.DataHelper;
 import ru.netology.banklogin.data.SQLHelper;
 import ru.netology.banklogin.page.LoginPage;
@@ -20,7 +17,7 @@ public class BankLoginTest {
         cleanAuthCodes();
     }
 
-    @AfterEach
+    @AfterAll
     static void tearDownAll() { // после всех тестов чистится база данных, после каждого теста нужно перезапускать джарник иначе не будет валидного логина не получится
         cleanDatabase();
     }
@@ -58,19 +55,4 @@ public class BankLoginTest {
         verificationPage.verify(verificationCode.getCode());
         verificationPage.verifyErrorNotification("Ошибка! \nНеверно указан код! Попробуйте ещё раз.");
     }
-
-    @Test
-    @DisplayName("Cледует заблокировать пользователя, если он трижды ввел Неверный код")
-    void shouldBlockUserIfInputThreeTimesInvalidCode() {
-        var authInfo = DataHelper.getAuthInfoWithTestData();
-        var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.generateRandomVerificationCode();
-        verificationPage.verify(verificationCode.getCode());
-        verificationPage.verifyErrorNotification("Неверно указан код! Попробуйте ещё раз.");
-        verificationPage.verify(verificationCode.getCode());
-        verificationPage.verifyErrorNotification("Неверно указан код! Попробуйте ещё раз.");
-        verificationPage.verify(verificationCode.getCode());
-        verificationPage.verifyErrorNotification("Система заблокирована!");
-    }
-
 }

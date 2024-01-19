@@ -12,7 +12,7 @@ public class VerificationPage {
     private final SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
 
     public void verifyVerificationPageVisibility() {  //проверяет видимость страницы
-        codeField.shouldHave(visible);
+        codeField.shouldBe(visible);
     }
 
     public void verifyErrorNotification(String expectedText) {   //проверяет  появление ошибки
@@ -23,7 +23,8 @@ public class VerificationPage {
         verify(verificationCode);
         return new DashboardPage();
     }
-// методы разделены, т.е. проверка видимости DashboardPage вынесена в хидор
+
+    // методы разделены, т.е. проверка видимости DashboardPage вынесена в хидор
     public void verify(String verificationCode) {   //проверяет верификацию, не возвращая таблицу дашборда
         codeField.setValue(verificationCode);
         verifyButton.click();

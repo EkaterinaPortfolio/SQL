@@ -25,7 +25,7 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
-    systemProperty 'dv.url', System.getProperty('db.url', "jdbc:mysql://localhost:3306/app") //
+    systemProperty 'db.url', System.getProperty('db.url', "jdbc:mysql://localhost:3306/app") //
     //можно ввести в командную строку тот url что нужен в данный момент, а если не вводить, то будет тот, что указан в свойстве
     //  ./gradlew clean test -Ddb.url=jdbc:mysql://localhost:3306/app   - это команда для  url
 }
