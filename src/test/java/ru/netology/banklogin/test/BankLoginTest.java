@@ -29,7 +29,7 @@ public class BankLoginTest {
 
     @Test
     @DisplayName("Должен успешно войти в панель мониторинга с существующими логином и паролем из текстовых данных sut")
-    void shouldSuccessfulLogin(){
+    void shouldSuccessfulLogin() {
         var authInfo = DataHelper.getAuthInfoWithTestData(); //получили валидные данные для аутентификации
         var verificationPage = loginPage.validLogin(authInfo); //на странице loginPage ввели валидные данные, нажали кнопку
         verificationPage.verifyVerificationPageVisibility(); //возвратили новую страницу верификации и положили ее в переменную, на странице верификации проверили что видин элемент поле ввода кода, что принимаем как доказ. перехода на страницу верификации
@@ -54,5 +54,19 @@ public class BankLoginTest {
         var verificationCode = DataHelper.generateRandomVerificationCode();  //вводим случайный код верификации
         verificationPage.verify(verificationCode.getCode());
         verificationPage.verifyErrorNotification("Ошибка! \nНеверно указан код! Попробуйте ещё раз.");
+    }
+
+    @Test
+    @DisplayName("Cледует заблокировать пользователя, если он трижды ввел Неверный код")
+    void shouldBlockUserIfInputThreeTimesInvalidCode() {
+        var authInfo = DataHelper.getAuthInfoWithTestData();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var verificationCode = DataHelper.generateRandomVerificationCode();
+        verificationPage.verify(verificationCode.getCode());
+        verificationPage.verifyErrorNotification("Неверно указан код! Попробуйте ещё раз.");
+        verificationPage.verify(verificationCode.getCode());
+        verificationPage.verifyErrorNotification("Неверно указан код! Попробуйте ещё раз.");
+        verificationPage.verify(verificationCode.getCode());
+        verificationPage.verifyErrorNotification("Система заблокирована!");
     }
 }
