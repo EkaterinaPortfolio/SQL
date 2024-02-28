@@ -11,21 +11,20 @@ public class VerificationPage {
     private final SelenideElement verifyButton = $("[data-test-id=action-verify]");
     private final SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
 
-    public void verifyVerificationPageVisibility() {  //проверяет видимость страницы
+    public void verifyVerificationPageVisibility() {
         codeField.shouldBe(visible);
     }
 
-    public void verifyErrorNotification(String expectedText) {   //проверяет  появление ошибки
+    public void verifyErrorNotification(String expectedText) { 
         errorNotification.shouldHave(exactText(expectedText)).shouldBe(visible);
     }
 
-    public DashboardPage validVerify(String verificationCode) {  //валидная верификация и возвращает страницу  DashboardPage
+    public DashboardPage validVerify(String verificationCode) {
         verify(verificationCode);
         return new DashboardPage();
     }
 
-    // методы разделены, т.е. проверка видимости DashboardPage вынесена в хидор
-    public void verify(String verificationCode) {   //проверяет верификацию, не возвращая таблицу дашборда
+    public void verify(String verificationCode) {
         codeField.setValue(verificationCode);
         verifyButton.click();
     }
