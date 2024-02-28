@@ -10,37 +10,36 @@ import static ru.netology.banklogin.data.SQLHelper.cleanAuthCodes;
 import static ru.netology.banklogin.data.SQLHelper.cleanDatabase;
 
 public class BankLoginTest {
-    LoginPage loginPage; //объявляем, как переменную экземпляра класса
+    LoginPage loginPage; 
 
     @AfterEach
-    void tearDown() {  //чистит коды верификации
+    void tearDown() { 
         cleanAuthCodes();
     }
 
     @AfterAll
-    static void tearDownAll() { // после всех тестов чистится база данных, после каждого теста нужно перезапускать джарник иначе не будет валидного логина не получится
+    static void tearDownAll() { 
         cleanDatabase();
     }
 
     @BeforeEach
     void setUp() {
-        loginPage = open("http://localhost:9999", LoginPage.class); //перед каждым тестом открывается страница и ей присваивается значение loginPage
+        loginPage = open("http://localhost:9999", LoginPage.class);
     }
 
     @Test
     @DisplayName("Должен успешно войти в панель мониторинга с существующими логином и паролем из текстовых данных sut")
     void shouldSuccessfulLogin() {
-        var authInfo = DataHelper.getAuthInfoWithTestData(); //получили валидные данные для аутентификации
-        var verificationPage = loginPage.validLogin(authInfo); //на странице loginPage ввели валидные данные, нажали кнопку
-        verificationPage.verifyVerificationPageVisibility(); //возвратили новую страницу верификации и положили ее в переменную, на странице верификации проверили что видин элемент поле ввода кода, что принимаем как доказ. перехода на страницу верификации
-        var verificationCode = SQLHelper.getVerificationCode();  //получили код верификации
-        verificationPage.validVerify(verificationCode.getCode()); //ввел код, и верную новый экхемпляр DashboardPage
+        var authInfo = DataHelper.getAuthInfoWithTestData(); 
+        var verificationPage = loginPage.validLogin(authInfo); 
+        verificationPage.verifyVerificationPageVisibility();
+        verificationPage.validVerify(verificationCode.getCode());
     }
 
     @Test
     @DisplayName("Должно появиться уведомление об ошибке, если пользователь не существует в базе")
     void shouldGetErrorNotificationIfLoginWithRandomUserWithoutAddingToBase() {
-        var authInfo = DataHelper.generateRandomUser();  //вводим данные случайного пользователя
+        var authInfo = DataHelper.generateRandomUser();
         loginPage.validLogin(authInfo);
         loginPage.verifyErrorNotification("Ошибка! \nНеверно указан логин или пароль");
     }
@@ -51,7 +50,7 @@ public class BankLoginTest {
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.verifyVerificationPageVisibility();
-        var verificationCode = DataHelper.generateRandomVerificationCode();  //вводим случайный код верификации
+        var verificationCode = DataHelper.generateRandomVerificationCode(); 
         verificationPage.verify(verificationCode.getCode());
         verificationPage.verifyErrorNotification("Ошибка! \nНеверно указан код! Попробуйте ещё раз.");
     }
